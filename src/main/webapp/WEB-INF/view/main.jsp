@@ -9,8 +9,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 <!-- 引入css样式 -->
-<link href="/generator-web/statics/css/sui.min.css" rel="stylesheet" type="text/css"/>
-<link href="/generator-web/statics/css/sui-append.min.css" rel="stylesheet" type="text/css"/>
 <link href="/generator-web/statics/css/default.css" rel="stylesheet" type="text/css"/>
 <link href="/generator-web/statics/css/bootstrap/bootstrap.css" rel="stylesheet" type="text/css"/>
 <link href="/generator-web/statics/css/bootstrap/bootstrap-theme.css" rel="stylesheet" type="text/css"/>
@@ -18,15 +16,25 @@
 <!-- 引入js -->
 <script type="text/javascript" src="/generator-web/statics/js/jquery.js"></script>
 <script type="text/javascript" src="/generator-web/statics/js/jquery.cookie.js"></script>
-<script type="text/javascript" src="/generator-web/statics/js/sui.min.js"></script>
 <script type="text/javascript" src="/generator-web/statics/js/layui.js"></script>
 <script type="text/javascript" src="/generator-web/statics/plugins/layer/layer.js"></script>
 <script type="text/javascript" src="/generator-web/statics/plugins/my97datepicker/WdatePicker.js"></script>
 <head>
     <title>Title</title>
+    <style>
+        body {
+            padding-top: 1px;
+            border:1px solid black;
+        }
+
+        .mygrid-wrapper-div {
+            overflow: scroll;
+        }
+
+    </style>
 </head>
 <body>
-<div class="container">
+<div class="container mygrid-wrapper-div" style="width: 100%;height: 100%;">
     <nav class="navbar navbar-default navbar-static-top" role="navigation">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -118,7 +126,7 @@
                     <input type="hidden" id="otherConfig" name="otherConfig">
                 </div>
                 <div class="form-group">
-                    <div class="col-sm-offset-9 col-lg-12">
+                    <div class="col-sm-offset-9">
                         <button type="button" class="btn btn-default" id="btnOtherConfig">OtherConfig</button>
                         <button type="button" class="btn btn-default" id="btnQuery">Generator</button>
                     </div>
@@ -130,7 +138,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">表配置</div>
                     <!-- Table -->
-                    <table class="table table-hover table-bordered table-responsive" width="600px;">
+                    <table class="table-hover table-bordered table-responsive" width="600px;">
                         <thead>
                             <th width="200px">tableName</th>
                             <th width="200px">domainObjectName</th>
@@ -148,11 +156,11 @@
                     <!-- Table -->
                     <table class="table table-hover">
                         <thead>
-                        <tr>
-                            <td>ignoreColumn</td>
-                            <td>表名称</td>
-                            <td>操作</td>
-                        </tr>
+                            <tr>
+                                <td>ignoreColumn</td>
+                                <td>表名称</td>
+                                <td>操作</td>
+                            </tr>
                         </thead>
                         <tbody id="content2">
 
@@ -163,8 +171,6 @@
         </div>
     </div>
 </div>
-
-
 
 </body>
 
