@@ -1,0 +1,23 @@
+{
+  "location": "D:\\data\\generator\\mysql-connector-java-5.1.34.jar",
+  "projectFolder": "D:/data/generator",
+  "modelPackage": "com.fish.model",
+  "modelPackageTargetFolder": "src/main/java",
+  "mappingXMLPackage": "com.fish.mapping",
+  "mappingXMLTargetFolder": "src/main/resources",
+  "daoPackage": "com.fish.dao",
+  "daoTargetFolder": "src/main/java",
+  "tableName": "columns_priv ,db ,func ,help_category ,help_keyword ,help_relation ,help_topic ,host ,proc ,procs_priv ,tables_priv ,time_zone ,time_zone_leap_second ,time_zone_name ,time_zone_transition ,time_zone_transition_type ,user ,",
+  "tableConfigValue": "{\"columns_priv\":{\"enableInsert\":\"true\",\"enableSelectByPrimaryKey\":\"true\",\"enableUpdateByPrimaryKey\":\"true\",\"enableDeleteByPrimaryKey\":\"true\",\"enableSelectByExample\":\"false\",\"enableDeleteByExample\":\"false\",\"enableCountByExample\":\"false\",\"enableUpdateByExample\":\"false\"}}",
+  "otherConfig": "{\"commentGenerator.suppressAllComments\":\"false\",\"commentGenerator.suppressDate\":\"false\",\"javaTypeResolver.forceBigDecimals\":\"true\"}",
+  "tableColumn": {
+    "columns_priv_Host ": false,
+    "columns_priv_Db ": false,
+    "columns_priv_User ": false,
+    "columns_priv_Table_name ": false,
+    "columns_priv_Column_name ": false,
+    "columns_priv_Timestamp ": false,
+    "columns_priv_Column_priv ": false
+  },
+  "javaClientGenerator": "XMLMAPPER"
+}

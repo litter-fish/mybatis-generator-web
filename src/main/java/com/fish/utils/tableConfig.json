@@ -1,0 +1,22 @@
+{
+  "student": {
+    "enableInsert": "true",
+    "enableSelectByPrimaryKey": "true",
+    "enableUpdateByPrimaryKey": "true",
+    "enableSelectByExample": "true",
+    "enableDeleteByPrimaryKey": "true",
+    "enableDeleteByExample": "true",
+    "enableCountByExample": "true",
+    "enableUpdateByExample": "true"
+  },
+  "teacher": {
+    "enableInsert": "true",
+    "enableSelectByPrimaryKey": "true",
+    "enableUpdateByPrimaryKey": "true",
+    "enableSelectByExample": "true",
+    "enableDeleteByPrimaryKey": "true",
+    "enableDeleteByExample": "true",
+    "enableCountByExample": "true",
+    "enableUpdateByExample": "true"
+  }
+}
