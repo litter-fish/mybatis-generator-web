@@ -262,9 +262,14 @@ public class GeneratorConfigUtils {
          <table tableName="student" domainObjectName="Student" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
          */
         String tableName = generatorConfig.getTableName();
+        JSONObject tableJson = ClassUtils.toJSONObject(tableName);
+
         String tableColumn = generatorConfig.getTableColumn();
 
-        JSONObject jsonObject = toJSONObject(tableColumn);
+        JSONObject jsonObject = ClassUtils.toJSONObject(tableColumn);
+        // 移除需要删除的表
+        removeTable(tableJson, jsonObject);
+
         Set<Map.Entry<String, Object>> set = jsonObject.entrySet();
 
         Map<String, List<String>> map = new HashMap();
@@ -287,37 +292,63 @@ public class GeneratorConfigUtils {
 
         String tableConfigValue = generatorConfig.getTableConfigValue();
         JSONObject jsonObject1 = ClassUtils.toJSONObject(tableConfigValue);
-        if (StringUtils.isNotEmpty(tableName)) {
-            String [] tableNames = tableName.split(",");
-            for (String str : tableNames) {
-                Element table = context.addElement("table");
-                table.addAttribute("tableName", str.trim());
-                table.addAttribute("domainObjectName", str.trim().substring(0, 1).toUpperCase() + str.trim().substring(1));
+        // 创建表元素
+        createTableElement(context, tableJson, map, jsonObject1);
+    }
 
-                String tableConfigValueOne = jsonObject1.getString(str.trim());
+    private static void createTableElement(Element context, JSONObject tableJson, Map<String, List<String>> map, JSONObject jsonObject1) {
+        for (Map.Entry<String, Object> entry : tableJson.entrySet()) {
+            Element table = context.addElement("table");
+            table.addAttribute("tableName", entry.getKey().trim());
+            table.addAttribute("domainObjectName", entry.getKey().trim().substring(0, 1).toUpperCase() + entry.getKey().trim().substring(1));
 
-                if (StringUtils.isNotEmpty(tableConfigValueOne)) {
+            String tableConfigValueOne = jsonObject1.getString(entry.getKey().trim());
 
-                    TableConfig tableConfig = ClassUtils.toJavaObject(tableConfigValueOne, TableConfig.class);
-                    if (null != tableConfig) {
-                        addAttributeToElement(table, tableConfig);
+            if (StringUtils.isNotEmpty(tableConfigValueOne)) {
+
+                TableConfig tableConfig = ClassUtils.toJavaObject(tableConfigValueOne, TableConfig.class);
+                if (null != tableConfig) {
+                    addAttributeToElement(table, tableConfig);
+                }
+            }
+
+            List<String> list = map.get(entry.getKey().trim().toLowerCase());
+            if (CollectionUtils.isNotEmpty(list)) {
+                /**
+                 * <ignoreColumn> 元素
+                 */
+                for (String column : list) {
+                    Element ignoreColumn = table.addElement("ignoreColumn");
+                    ignoreColumn.addAttribute("column", column);
+                }
+            }
+
+        }
+    }
+
+    private static void removeTable(JSONObject tableJson, JSONObject jsonObject) {
+        List<String> needRemoveTableColumn = new ArrayList<>();
+        List<String> needRemoveTable = new ArrayList<>();
+        for (Map.Entry<String, Object> set :  tableJson.entrySet()) {
+            String key = set.getKey();
+            Object value = set.getValue();
+
+            if (null != value && !Boolean.valueOf(value.toString())) {
+
+                for (Map.Entry<String, Object> columnSet :  jsonObject.entrySet()) {
+                    String columnKey = columnSet.getKey();
+                    if (columnKey.toLowerCase().startsWith(key.toLowerCase() + "_")) {
+                        needRemoveTableColumn.add(columnKey);
                     }
                 }
-
-                List<String> list = map.get(str.trim().toLowerCase());
-                if (CollectionUtils.isNotEmpty(list)) {
-                    /**
-                     * <ignoreColumn> 元素
-                     */
-                    for (String column : list) {
-                        Element ignoreColumn = table.addElement("ignoreColumn");
-                        ignoreColumn.addAttribute("column", column);
-                    }
-                }
-
+                needRemoveTable.add(key);
             }
         }
 
+        if (CollectionUtils.isNotEmpty(needRemoveTableColumn)) {
+            needRemoveTableColumn.forEach(jsonObject::remove);
+            needRemoveTable.forEach(tableJson::remove);
+        }
     }
 
     public static void generatorProperty(Element element ) {

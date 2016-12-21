@@ -138,11 +138,12 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">表配置</div>
                     <!-- Table -->
-                    <table class="table-hover table-bordered table-responsive" width="600px;">
+                    <table class="table table-hover">
                         <thead>
-                            <th width="200px">tableName</th>
-                            <th width="200px">domainObjectName</th>
-                            <th width="200px">config</th>
+                            <th>ignoreTable</th>
+                            <th>tableName</th>
+                            <th>domainObjectName</th>
+                            <th>config</th>
                         </thead>
                         <tbody id="content">
 
@@ -315,16 +316,17 @@
         var obj = eval( "(" + data + ")" );//转换后的JSON对象
         /*$("#content").refresh();
          $("#content").append("<tr><td>表名称</td><td>操作</td></tr>");*/
-        var allTable = '';
+        var tableValue = {};
         $.each(obj.data, function(i, item) {
-            var content = "<tr tableName=" + item.table + "><td width='200px'>" + item.table + "</td><td  width='200px'>" + item.table + "</td>";
+            var content = "<tr tableName=" + item.table + "><td><div class='checkbox'><label><input type='checkbox' tableName=" + item.table + "></label></div></td>";
+            content += "<td width='200px'>" + item.table + "</td><td  width='200px'>" + item.table + "</td>";
 
             content += "<td  width='200px'><button type=\"button\" class=\"btn btn-default tableConfig\" name=" + item.table + ">config</button></td></tr>";
-            allTable = allTable + item.table + ',';
+            tableValue[$.trim(item.table)] = true;
 
             $("#content").append(content);
         });
-        $("#tableName").val(allTable);
+        $("#tableName").val(JSON.stringify(tableValue));
 
         $("#content > tr").click(function () {
             var tableName = $(this).attr("tableName");
@@ -332,6 +334,17 @@
             database["tableName"] = tableName;*/
             ajaxBody("/generator-web/base/getTableInfo", tableName, queryTableInfo);
         });
+
+        $("#content input[type=checkbox]").change(function() {
+            var tableName = $(this).attr("tableName");
+            if ($(this).is(":checked")) {
+                tableValue[tableName] = false;
+            } else {
+                tableValue[tableName] = true;
+            }
+            $("#tableName").val(JSON.stringify(tableValue));
+        });
+
     }
 
     var columnMapTable = {};
@@ -350,7 +363,7 @@
             columnMapTable[reqParam + "_" + item.column] = false;
         });
 
-        $("input[type=checkbox]").change(function() {
+        $("#content2 input[type=checkbox]").change(function() {
             var column = $(this).attr("column");
             if ($(this).is(":checked")) {
                 columnMapTable[column] = true;
