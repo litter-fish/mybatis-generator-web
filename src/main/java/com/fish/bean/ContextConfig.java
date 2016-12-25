@@ -1,5 +1,7 @@
 package com.fish.bean;
 
+import com.fish.annotation.Attribute;
+import com.fish.annotation.Element;
 import lombok.Data;
 
 import java.util.List;
@@ -8,8 +10,10 @@ import java.util.List;
  * Created by yudin on 2016/12/19.
  */
 @Data
+@Element("context")
 public class ContextConfig {
 
+    @Attribute("id")
     private String id;
     /**
      * 这个属性用来设置生成对象类型的默认值。 对象类型定义了MBG如何生成实体类。 对某些对象类型，MBG会给每一个表生成一个单独的实体类。 对另外一些对象类型，MBG会根据表结构生成不同的类。这个属性有以下可选值：
@@ -18,6 +22,7 @@ public class ContextConfig {
      * flat 	该模型为每一张表只生成一个实体类。这个实体类包含表中的所有字段。
      * hierarchical 	如果表有主键,那么该模型会产生一个单独的主键实体类,如果表还有BLOB字段， 则会为表生成一个包含所有BLOB字段的单独的实体类,然后为所有其他的字段生成一个单独的实体类。 MBG会在所有生成的实体类之间维护一个继承关系（注：BLOB类 继承 其他字段类 继承 主键类）。
      */
+    @Attribute("defaultModelType")
     private String defaultModelType;
     /**
      * 此属性用于指定生成的代码的运行时目标。 该属性支持这些特殊的值：
@@ -30,16 +35,18 @@ public class ContextConfig {
      * <p>
      * 如果您想创建一个完全不同的代码生成器， 使用一个继承了org.mybatis.generator.api.IntrospectedTable类的权限定类名替换该值。 通过这个值，您可以创建您自己的代码生成器，然后插入到代码生成器引擎中。 查阅 扩展 MyBatis Generator 页面获取更多信息。
      */
+    @Attribute("targetRuntime")
     private String targetRuntime;
     /**
      * 使用这个值去指定一个继承了org.mybatis.generator.api.IntrospectedColumn类的权限定名称。 这可以修改代码生成器计算列信息时候的行为。
      * 查阅 扩展 MyBatis Generator 页面获取更多信息。
      */
+    @Attribute("introspectedColumnImpl")
     private String introspectedColumnImpl;
 
-    private List<PropertyGenerator> property;
+    private List<PropertyGenerator> propertyGenerator;
 
-    private List<TableConfig> table;
+    private List<TableConfig> tableConfig;
 
     private JavaModelGenerator javaModelGenerator;
 

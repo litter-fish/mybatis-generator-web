@@ -1,11 +1,11 @@
 package com.fish.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.fish.bean.Database;
-import com.fish.bean.GeneratorConfig;
+import com.fish.bean.GeneratorConfiguration;
 import com.fish.service.IDatabaseService;
 import com.fish.utils.ClassUtils;
-import com.fish.utils.GeneratorConfigUtils;
+import com.fish.utils.GeneratorXmlFile;
+import com.fish.utils.ParseRequestParameter;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -52,6 +52,7 @@ public class BaseController {
             request.getSession().setAttribute("connectionURL", url);
             request.getSession().setAttribute("ip", database.getIp());
             request.getSession().setAttribute("port", database.getPort());
+            request.getSession().setAttribute("driverClass", "com.mysql.jdbc.Driver");
         } catch (Exception w) {
             w.printStackTrace();
         }
@@ -168,7 +169,21 @@ public class BaseController {
     public String generatorConfig(HttpServletRequest request, @RequestBody String body) {
 
 
-        Database database = getDatabase(request);
+        GeneratorConfiguration generatorConfiguration = new GeneratorConfiguration();
+        try {
+            ParseRequestParameter.jsonToObject(body, generatorConfiguration);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        }
+
+        GeneratorXmlFile.generatorXmlFiles(generatorConfiguration);
+
+
+
+
+        /*Database database = getDatabase(request);
 
         GeneratorConfig generatorConfig = ClassUtils.toJavaObject(body, GeneratorConfig.class);
         generatorConfig.setDatabase(database);
@@ -181,7 +196,7 @@ public class BaseController {
         generatorConfig.setTableConfigValue(tableConfigValue);
         generatorConfig.setTableName(tableName);
 
-        GeneratorConfigUtils.generatorXmlFile(generatorConfig);
+        GeneratorConfigUtils.generatorXmlFile(generatorConfig);*/
 
         return "";
 

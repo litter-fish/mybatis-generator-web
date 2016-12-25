@@ -10,6 +10,9 @@ public class GeneratorConfig {
 
     private String name;
 
+    /**
+     * 驱动路径
+     */
     private String location;
 
     private String projectFolder;

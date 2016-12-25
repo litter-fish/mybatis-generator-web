@@ -1,20 +1,100 @@
 {
-  "columns_priv ": true,
-  "db ": true,
-  "func ": true,
-  "help_category ": true,
-  "help_keyword ": true,
-  "help_relation ": true,
-  "help_topic ": true,
-  "host ": true,
-  "proc ": true,
-  "procs_priv ": true,
-  "tables_priv ": true,
-  "time_zone ": true,
-  "time_zone_leap_second ": true,
-  "time_zone_name ": true,
-  "time_zone_transition ": true,
-  "time_zone_transition_type ": true,
-  "user ": true,
-  "undefined": true
+  "projectFolder": "D:/data/generator",
+  "properties": {
+    "resource": "resource",
+    "url": "url"
+  },
+  "classPathEntry": [
+    {
+      "location": "D:\\data\\generator\\mysql-connector-java-5.1.34.jar"
+    }
+  ],
+  "contextConfig": [
+    {
+      "commentGenerator": {
+        "propertyGenerator": [
+          {
+            "name": "suppressAllComments",
+            "value": "true"
+          },
+          {
+            "name": "suppressDate",
+            "value": "true"
+          }
+        ]
+      },
+      "javaTypeResolver": {
+        "propertyGenerator": [
+          {
+            "name": "forceBigDecimals",
+            "value": "true"
+          }
+        ]
+      },
+      "tableConfig": [
+        {
+          "tableName": "student",
+          "domainObjectName": "student",
+          "enableInsert": "true",
+          "enableSelectByPrimaryKey": "true",
+          "enableUpdateByPrimaryKey": "true",
+          "enableDeleteByPrimaryKey": "true",
+          "enableSelectByExample": "false",
+          "enableDeleteByExample": "false",
+          "enableCountByExample": "false",
+          "pdateByExample": "false"
+        },
+        {
+          "tableName": "teacher",
+          "domainObjectName": "teacher"
+        }
+      ],
+      "id": "D:/data/generator",
+      "defaultModelType": "root",
+      "targetRuntime": "root",
+      "propertyGenerator": [
+        {
+          "name": "",
+          "value": "true"
+        }
+      ],
+      "javaModelGenerator": {
+        "modelPackage": "com.fish.model",
+        "modelPackageTargetFolder": "src/main/java",
+        "propertyGenerator": [
+          {
+            "name": "enableSubPackages",
+            "value": "true"
+          }
+        ]
+      },
+      "sqlMapGenerator": {
+        "mappingXMLPackage": "com.fish.mapping",
+        "mappingXMLTargetFolder": "src/main/resources",
+        "propertyGenerator": [
+          {
+            "name": "enableSubPackages",
+            "value": "true"
+          }
+        ]
+      },
+      "javaClientGenerator": {
+        "type": "XMLMAPPER",
+        "daoPackage": "com.fish.dao",
+        "daoTargetFolder": "src/main/java",
+        "propertyGenerator": [
+          {
+            "name": "enableSubPackages",
+            "value": "true"
+          }
+        ]
+      },
+      "jdbcConnection": {
+        "userId": "root",
+        "driverClass": "com.mysql.jdbc.Driver",
+        "connectionURL": "jdbc:mysql://127.0.0.1/test?characterEncoding=utf8",
+        "password": "root"
+      }
+    }
+  ]
 }

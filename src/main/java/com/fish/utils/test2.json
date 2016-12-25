@@ -1,0 +1,11 @@
+[
+  {
+    "tableConfig.name": "student",
+    "tableConfig.enableInsert": "true",
+    "tableConfig.ignoreColumn":[{"column":"true"}]
+  },
+  {
+    "tableConfig.name": "teach",
+    "tableConfig.enableInsert": "true"
+  }
+]

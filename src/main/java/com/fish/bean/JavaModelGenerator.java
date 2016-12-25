@@ -1,5 +1,7 @@
 package com.fish.bean;
 
+import com.fish.annotation.Attribute;
+import com.fish.annotation.Element;
 import com.fish.annotation.Need;
 import lombok.Data;
 
@@ -9,11 +11,18 @@ import java.util.List;
  * Created by yudin on 2016/12/18.
  */
 @Data
+@Element("javaModelGenerator")
 public class JavaModelGenerator {
+
     @Need("true")
-    private String targetPackage;
+    @Attribute("targetPackage")
+    private String modelPackage;
+
     @Need("true")
-    private String targetProject;
+    @Attribute("targetProject")
+    private String modelPackageTargetFolder;
+
+
     @Need("true")
-    private List<PropertyGenerator> property;
+    private List<PropertyGenerator> propertyGenerator;
 }

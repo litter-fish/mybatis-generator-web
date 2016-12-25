@@ -69,7 +69,7 @@
                 <div class="row form-inline form-group">
                     <label for="projectFolder" class="col-lg-2 control-label">projectFolder</label>
                     <div class="col-lg-4">
-                        <input type="text" class="form-control" style="width: 100%;" id="projectFolder" name="projectFolder" placeholder="projectFolder" value="D:/data/generator">
+                        <input type="text" class="form-control" style="width: 100%;" id="projectFolder" name="projectFolder" placeholder="projectFolder" value="D:/data/generator/">
                     </div>
                 </div>
                 <div class="row form-inline form-group">
@@ -108,7 +108,7 @@
                     <div class="form-group col-sm-4">
                         <label for="javaClientGenerator" class="col-sm-4 control-label">type</label>
                         <div class="col-sm-4">
-                            <select class="form-control" id="javaClientGenerator" name="javaClientGenerator">
+                            <select class="form-control" id="javaClientGenerator" name="type">
                                 <option value="XMLMAPPER">XMLMAPPER</option>
                                 <option value="ANNOTATEDMAPPER">ANNOTATEDMAPPER</option>
                                 <option value="MIXEDMAPPER">MIXEDMAPPER</option>
@@ -118,12 +118,24 @@
                         </div>
                     </div>
                 </div>
-                <div class="hidden">
-                    <input type="hidden" id="tableName" name="tableName">
-                    <input type="hidden" id="domainObjectName" name="domainObjectName">
-                    <input type="hidden" id="tableColumn" name="tableColumn">
-                    <input type="hidden" id="tableConfigValue" name="tableConfigValue">
-                    <input type="hidden" id="otherConfig" name="otherConfig">
+                <div class="hidden" id="hiddenDiv">
+                    <%--<input type="hidden" id="tableName" name="tableConfig.tableName">
+                    <input type="hidden" id="domainObjectName" name="tableConfig.domainObjectName">
+                    <input type="hidden" id="tableColumn" name="tableConfig.tableColumn">--%>
+
+                    <input type="hidden" id="userId" name="userId" value="${userId}">
+                    <input type="hidden" id="driverClass" name="driverClass" value="${driverClass}">
+                    <input type="hidden" id="connectionURL" name="connectionURL" value="${connectionURL}">
+                    <input type="hidden" id="password" name="password" value="${password}">
+
+                    <input type="hidden" id="id" name="id" value="test">
+                    <input type="hidden" id="defaultModelType" name="defaultModelType" value="conditional">
+                    <input type="hidden" id="targetRuntime" name="targetRuntime" value="MyBatis3">
+
+                    <input type="hidden" id="commentGeneratorCom" name="commentGeneratorCom">
+                    <input type="hidden" id="javaTypeResolverCom" name="javaTypeResolverCom">
+                    <input type="hidden" id="sqlMapGenerator_property" name="sqlMapGenerator.property" value="${password}">
+                    <input type="hidden" id="javaClientGenerator_property" name="javaClientGenerator.property" value="${password}">
                 </div>
                 <div class="form-group">
                     <div class="col-sm-offset-9">
@@ -177,6 +189,8 @@
 
 <script>
 
+    var table = new Array();
+
     $(document).on('click', '#getAllTable >li >a', function() {
         layer.load(1,{
             shade: [0.1,'#fff'] //0.1透明度的白色背景
@@ -184,16 +198,84 @@
         var tableName = $(this).attr("tableName");
         /*var database = getPostData(_formDomId);
         database["tableName"] = tableName;*/
-        ajaxBody("/generator-web/base/getDatabase", tableName, queryAllTable);
+        ajaxBody("/generator-web/base/getDatabase", tableName, 0, queryAllTable);
     });
 
     var _formDomId = "GeneratorConfig";
+    var contextConfigArr = new Array();
+    var contextConfig = {};
     //保存
     $(document).on('click', '#btnQuery', function() {
+        var database = {};
 
-        var database = getPostData(_formDomId);
-        database["tableColumn"] = columnMapTable;
-        database["javaClientGenerator"] = $("#javaClientGenerator").val();
+        database["projectFolder"] = $("#projectFolder").val();
+
+        /*var properties = {};
+        properties["resource"] = "resource";
+        properties["url"] = "url";
+
+        database["properties"] = properties;*/
+
+        var classPathEntry = {};
+        var classPathEntryArr = new Array();
+        classPathEntry["location"] = $("#location").val();
+        classPathEntryArr.push(classPathEntry);
+
+        database["classPathEntry"] = classPathEntryArr;
+
+        contextConfig["id"] = $("#id").val();
+        contextConfig["defaultModelType"] = $("#defaultModelType").val();
+        contextConfig["targetRuntime"] = $("#targetRuntime").val();
+        contextConfig["introspectedColumnImpl"] = $("#introspectedColumnImpl").val();
+
+        /*var propertyGeneratorArr = new Array();
+        var propertyGenerator = {};
+        propertyGenerator["name"] ="";
+        propertyGenerator["value"] ="true";
+        propertyGeneratorArr.push(propertyGenerator);
+        contextConfig["propertyGenerator"] = propertyGeneratorArr;*/
+        //contextConfigArr.push(propertyGeneratorArr);
+
+        var javaModelGenerator = {};
+        javaModelGenerator["modelPackage"] = $("#modelPackage").val();
+        javaModelGenerator["modelPackageTargetFolder"] = $("#projectFolder").val() + $("#modelPackageTargetFolder").val();
+        var propertyGeneratorArrModel = new Array();
+        var propertyGeneratorModel = {};
+        propertyGeneratorModel["name"] = "enableSubPackages";
+        propertyGeneratorModel["value"] = "true";
+        propertyGeneratorArrModel.push(propertyGeneratorModel);
+        javaModelGenerator["propertyGenerator"] = propertyGeneratorArrModel;
+        contextConfig["javaModelGenerator"] = javaModelGenerator;
+
+
+        var sqlMapGenerator = {};
+        sqlMapGenerator["mappingXMLPackage"] = $("#mappingXMLPackage").val();
+        sqlMapGenerator["mappingXMLTargetFolder"] = $("#projectFolder").val() + $("#mappingXMLTargetFolder").val();
+        sqlMapGenerator["propertyGenerator"] = propertyGeneratorArrModel;
+        contextConfig["sqlMapGenerator"] = sqlMapGenerator;
+
+
+
+        var javaClientGenerator = {};
+        javaClientGenerator["type"] = $("#javaClientGenerator").val();
+        javaClientGenerator["daoPackage"] = $("#daoPackage").val();
+        javaClientGenerator["daoTargetFolder"] = $("#projectFolder").val() + $("#daoTargetFolder").val();
+        javaClientGenerator["propertyGenerator"] = propertyGeneratorArrModel;
+        contextConfig["javaClientGenerator"] = javaClientGenerator;
+
+        var jdbcConnection = {};
+        jdbcConnection["userId"] = $("#userId").val();
+        jdbcConnection["driverClass"] = $("#driverClass").val();
+        jdbcConnection["connectionURL"] = $("#connectionURL").val();
+        jdbcConnection["password"] = $("#password").val();
+        contextConfig["jdbcConnection"] = jdbcConnection;
+
+
+        contextConfigArr.push(contextConfig);
+
+        database["contextConfig"] = contextConfigArr;
+
+
         console.log(database);
         ajaxPostBody("/generator-web/base/generatorConfig", database, function(resData) {
 
@@ -202,44 +284,58 @@
 
     $(document).on('click', '#btnOtherConfig', function() {
 
-        ajaxBody("/generator-web/base/otherContextConfig", null, function(resData) {
+        ajaxBody("/generator-web/base/otherContextConfig", null, null, function(resData) {
             var index = layer.open({
                 type: 0,
                 content: resData, //这里content是一个普通的String
                 area: ['800px', '600px'],
                 btn: ['yes', 'no'],
-                yes : function (index, layero) {
-                    var otherConfig = {};
+                yes : function () {
+                    var commentGeneratorCom = {};
+                    var javaTypeResolverCom = {};
+                    var commentGeneratorArr = new Array();
                     $("#commentGenerator").find('select').each(function(){
-                        var input = $(this),name= input.attr("name"),value = input.val();
+                        var input = $(this),name = input.attr("name"),value = input.val();
                         if(isEmpty(input.val())){
                             return true;
                         }
-                        otherConfig["commentGenerator." + name] = value;
+
+                        var propertyGeneratorComment = {};
+                        propertyGeneratorComment["name"] = name;
+                        propertyGeneratorComment["value"] = value;
+                        commentGeneratorArr.push(propertyGeneratorComment);
                     });
+                    commentGeneratorCom["propertyGenerator"] = commentGeneratorArr;
+                    contextConfig["commentGenerator"] = commentGeneratorCom;
+
+                    var javaTypeResolverArr = new Array();
 
                     $("#javaTypeResolver").find('select').each(function(){
                         var input = $(this),name= input.attr("name"),value = input.val();
                         if(isEmpty(input.val())){
                             return true;
                         }
-                        otherConfig["javaTypeResolver." + name] = value;
+                        var javaTypeResolverComment = {};
+                        javaTypeResolverComment["name"] = name;
+                        javaTypeResolverComment["value"] = value;
+                        javaTypeResolverArr.push(javaTypeResolverComment);
                     });
+                    javaTypeResolverCom["propertyGenerator"] = javaTypeResolverArr;
+                    contextConfig["javaTypeResolver"] = javaTypeResolverCom;
 
-
-
-                    $("#otherConfig").val(JSON.stringify(otherConfig));
                     layer.closeAll();
                 }
             });
         });
     });
 
-    var tableConfig = {};
+    var array = new Array();
     $(document).on('click', '.tableConfig', function() {
 
         var tableName = $(this).attr("name");
-        ajaxBody("/generator-web/base/tableConfig", null, function (data) {
+        var number = $(this).attr("number");
+        var tableValue = tableArr[number];
+        ajaxBody("/generator-web/base/tableConfig", null, number, function (data) {
             layer.open({
                 type: 0,
                 content: data, //这里content是一个普通的String
@@ -247,15 +343,16 @@
                 btn: ['yes', 'no'],
                 yes : function (index, layero) {
                     var postData = {};
+
                     $("#tableConfig").find('select').each(function(){
                         var input = $(this),name= input.attr("name"),value = input.val();
                         if(isEmpty(input.val())){
                             return true;
                         }
-                        postData[name] = value;
+                        tableValue[name] = value;
                     });
-                    tableConfig[tableName] = postData;
-                    $("#tableConfigValue").val(JSON.stringify(tableConfig));
+                    tableArr[number] = tableValue;
+                    //$("#tableConfigValue").val(JSON.stringify(array));
                     layer.close(index);
                 }
             });
@@ -269,7 +366,7 @@
         layer.load(1,{
             shade: [0.1,'#fff'] //0.1透明度的白色背景
         });
-        ajaxBody(url, data,queryAllTable);
+        ajaxBody(url, data, 0, queryAllTable);
 
     };
 
@@ -310,72 +407,98 @@
         return null === obj || (typeof obj === 'undefined') || '' === obj;
     }
 
-    function queryAllTable(data, reqParam) {
+    var tableConfig = {};
+    var tableArr = new Array();
+    function queryAllTable(data, number, reqParam) {
         $("#content").empty();
         layer.closeAll('loading');
         var obj = eval( "(" + data + ")" );//转换后的JSON对象
         /*$("#content").refresh();
          $("#content").append("<tr><td>表名称</td><td>操作</td></tr>");*/
-        var tableValue = {};
+
         $.each(obj.data, function(i, item) {
-            var content = "<tr tableName=" + item.table + "><td><div class='checkbox'><label><input type='checkbox' tableName=" + item.table + "></label></div></td>";
+            var tableValue = {};
+            var content = "<tr tableName=" + item.table + " number=" + i + "><td><div class='checkbox'><label><input type='checkbox' tableName=" + item.table + " number=" + i + "></label></div></td>";
             content += "<td width='200px'>" + item.table + "</td><td  width='200px'>" + item.table + "</td>";
 
-            content += "<td  width='200px'><button type=\"button\" class=\"btn btn-default tableConfig\" name=" + item.table + ">config</button></td></tr>";
-            tableValue[$.trim(item.table)] = true;
+            content += "<td  width='200px'><button type=\"button\" class=\"btn btn-default tableConfig\" name=" + item.table + " number=" + i + ">config</button></td></tr>";
 
             $("#content").append(content);
+
+            var table = {};
+            table["tableName"] = $.trim(item.table);
+            table["domainObjectName"] = $.trim(item.table);
+            tableArr.push(table);
         });
-        $("#tableName").val(JSON.stringify(tableValue));
+        contextConfig["tableConfig"] = tableArr;
 
         $("#content > tr").click(function () {
             var tableName = $(this).attr("tableName");
+            var number = $(this).attr("number");
             /*var database = getPostData(_formDomId);
             database["tableName"] = tableName;*/
-            ajaxBody("/generator-web/base/getTableInfo", tableName, queryTableInfo);
+            ajaxBody("/generator-web/base/getTableInfo", tableName, number, queryTableInfo);
         });
 
         $("#content input[type=checkbox]").change(function() {
             var tableName = $(this).attr("tableName");
+            var number = $(this).attr("number");
+            var tableValue = tableArr[number];
+            var ignoreTable = false;
+
+
             if ($(this).is(":checked")) {
-                tableValue[tableName] = false;
+                ignoreTable = true;
             } else {
-                tableValue[tableName] = true;
+                ignoreTable = false;
             }
-            $("#tableName").val(JSON.stringify(tableValue));
+            tableValue["ignoreTable"] = ignoreTable;
+            tableArr[number] = tableValue;
+            //$("#tableName").val(JSON.stringify(tableValue));
         });
 
     }
 
-    var columnMapTable = {};
-
-    function queryTableInfo(data, reqParam) {
+    function queryTableInfo(data, number, reqParam) {
+        var ignoreColumn = new Array();
+        var tableValue = tableArr[number];
+        var columnMapTable = {};
         $("#content2").empty();
         layer.closeAll('loading');
         var obj = eval( "(" + data + ")" );//转换后的JSON对象
         /*$("#content").refresh();
          $("#content").append("<tr><td>表名称</td><td>操作</td></tr>");*/
         $.each(obj.data, function(i, item) {
-            var content = "<tr tableName=" + item.column + "><td><div class='checkbox'><label><input type='checkbox' " +
-                    "column=" + reqParam + "_" + item.column + "></label></div></td>";
+            var content = "<tr tableName=" + reqParam + "><td><div class='checkbox'><label><input type='checkbox' number=" + i + " column=" + item.column + "></label></div></td>";
             content += "<td>" + item.column + "</td><td>配置</td></tr>";
+
             $("#content2").append(content);
-            columnMapTable[reqParam + "_" + item.column] = false;
+
+            //columnMapTable[item.column] = false;
         });
 
         $("#content2 input[type=checkbox]").change(function() {
             var column = $(this).attr("column");
+
+
             if ($(this).is(":checked")) {
-                columnMapTable[column] = true;
+                columnMapTable["column"] = column;
+                columnMapTable["delimitedColumnName"] = false;
+                ignoreColumn.push(columnMapTable);
             } else {
-                columnMapTable[column] = false;
+                //ignoreColumn.
+                //columnMapTable[column] = false;
             }
-            $("#tableColumn").val(JSON.stringify(columnMapTable));
+            tableValue["ignoreColumn"] = ignoreColumn;
+            tableArr[number] = tableValue;
+            //table[number] = tableValue;
+            //alert(JSON.stringify(table));
+            /*$("#tableColumn").val(JSON.stringify(columnMapTable));*/
         });
     }
 
 
-    function ajaxBody(url, reqParam, callback) {
+    function ajaxBody(url, reqParam, number, callback) {
         layer.load(1,{
             shade: [0.1,'#fff'] //0.1透明度的白色背景
         });
@@ -386,7 +509,7 @@
             contentType:"application/json",
             async: true,
             success:function(data){
-                callback(data, reqParam);
+                callback(data, number, reqParam);
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 layer.closeAll('loading');
