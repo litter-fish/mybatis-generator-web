@@ -31,4 +31,6 @@ public class Database {
     @Need("true")
     private String driverClass;
 
+    private String dataBaseName;
+
 }

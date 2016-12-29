@@ -20,6 +20,7 @@ import org.mybatis.generator.internal.rules.ConditionalModelRules;
 import org.mybatis.generator.internal.rules.FlatModelRules;
 import org.mybatis.generator.internal.rules.HierarchicalModelRules;
 import org.mybatis.generator.internal.rules.Rules;
+import org.mybatis.generator.util.ClassUtils;
 
 import java.util.*;
 
@@ -1311,7 +1312,7 @@ public abstract class IntrospectedTable {
         StringBuilder sb = new StringBuilder();
         sb.append(calculateJavaClientImplementationPackage());
         sb.append('.');
-        sb.append(fullyQualifiedTable.getDomainObjectName());
+        sb.append(ClassUtils.splic(fullyQualifiedTable.getDomainObjectName()));
         sb.append("DAOImpl"); //$NON-NLS-1$
         setDAOImplementationType(sb.toString());
 

@@ -15,12 +15,6 @@
  */
 package org.mybatis.generator.codegen.mybatis3.javamapper;
 
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
-import static org.mybatis.generator.internal.util.messages.Messages.getString;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.mybatis.generator.api.CommentGenerator;
 import org.mybatis.generator.api.dom.java.CompilationUnit;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
@@ -28,23 +22,16 @@ import org.mybatis.generator.api.dom.java.Interface;
 import org.mybatis.generator.api.dom.java.JavaVisibility;
 import org.mybatis.generator.codegen.AbstractJavaClientGenerator;
 import org.mybatis.generator.codegen.AbstractXmlGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.AbstractJavaMapperMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.CountByExampleMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.DeleteByExampleMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.DeleteByPrimaryKeyMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.InsertMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.InsertSelectiveMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.SelectByExampleWithBLOBsMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.SelectByExampleWithoutBLOBsMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.SelectByPrimaryKeyMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.UpdateByExampleSelectiveMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.UpdateByExampleWithBLOBsMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.UpdateByExampleWithoutBLOBsMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.UpdateByPrimaryKeySelectiveMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.UpdateByPrimaryKeyWithBLOBsMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.UpdateByPrimaryKeyWithoutBLOBsMethodGenerator;
+import org.mybatis.generator.codegen.mybatis3.javamapper.elements.*;
 import org.mybatis.generator.codegen.mybatis3.xmlmapper.XMLMapperGenerator;
 import org.mybatis.generator.config.PropertyRegistry;
+import org.mybatis.generator.util.ClassUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 /**
  * @author Jeff Butler
@@ -70,7 +57,7 @@ public class JavaMapperGenerator extends AbstractJavaClientGenerator {
         CommentGenerator commentGenerator = context.getCommentGenerator();
 
         FullyQualifiedJavaType type = new FullyQualifiedJavaType(
-                introspectedTable.getMyBatis3JavaMapperType());
+                ClassUtils.splic(introspectedTable.getMyBatis3JavaMapperType()));
         Interface interfaze = new Interface(type);
         interfaze.setVisibility(JavaVisibility.PUBLIC);
         commentGenerator.addJavaFileComment(interfaze);

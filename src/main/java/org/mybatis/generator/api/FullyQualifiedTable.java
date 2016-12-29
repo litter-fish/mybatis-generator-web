@@ -15,14 +15,15 @@
  */
 package org.mybatis.generator.api;
 
+import org.mybatis.generator.config.Context;
+import org.mybatis.generator.util.ClassUtils;
+
 import static org.mybatis.generator.internal.util.EqualsUtil.areEqual;
 import static org.mybatis.generator.internal.util.HashCodeUtil.SEED;
 import static org.mybatis.generator.internal.util.HashCodeUtil.hash;
 import static org.mybatis.generator.internal.util.JavaBeansUtil.getCamelCaseString;
 import static org.mybatis.generator.internal.util.StringUtility.composeFullyQualifiedTableName;
 import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
-
-import org.mybatis.generator.config.Context;
 
 /**
  * The Class FullyQualifiedTable.
@@ -123,10 +124,11 @@ public class FullyQualifiedTable {
         if (stringHasValue(domainObjectName)) {
             int index = domainObjectName.lastIndexOf('.');
             if (index == -1) {
-                this.domainObjectName = domainObjectName;
+                // 2016-12-27 修改类的命名方式，使用驼峰命名方法
+                this.domainObjectName = ClassUtils.splic(domainObjectName);
             } else {
-                this.domainObjectName = domainObjectName.substring(index + 1);
-                this.domainObjectSubPackage = domainObjectName.substring(0, index);
+                this.domainObjectName = ClassUtils.splic(domainObjectName.substring(index + 1));
+                this.domainObjectSubPackage = ClassUtils.splic(domainObjectName.substring(0, index));
             }
         }
 

@@ -15,12 +15,6 @@
  */
 package org.mybatis.generator.codegen.mybatis3.javamapper;
 
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
-import static org.mybatis.generator.internal.util.messages.Messages.getString;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.mybatis.generator.api.CommentGenerator;
 import org.mybatis.generator.api.dom.java.CompilationUnit;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
@@ -28,14 +22,16 @@ import org.mybatis.generator.api.dom.java.Interface;
 import org.mybatis.generator.api.dom.java.JavaVisibility;
 import org.mybatis.generator.codegen.AbstractJavaClientGenerator;
 import org.mybatis.generator.codegen.AbstractXmlGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.AbstractJavaMapperMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.DeleteByPrimaryKeyMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.InsertMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.SelectAllMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.SelectByPrimaryKeyMethodGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.elements.UpdateByPrimaryKeyWithoutBLOBsMethodGenerator;
+import org.mybatis.generator.codegen.mybatis3.javamapper.elements.*;
 import org.mybatis.generator.codegen.mybatis3.xmlmapper.SimpleXMLMapperGenerator;
 import org.mybatis.generator.config.PropertyRegistry;
+import org.mybatis.generator.util.ClassUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 /**
  * @author Jeff Butler
@@ -61,7 +57,7 @@ public class SimpleJavaClientGenerator extends AbstractJavaClientGenerator {
         CommentGenerator commentGenerator = context.getCommentGenerator();
 
         FullyQualifiedJavaType type = new FullyQualifiedJavaType(
-                introspectedTable.getMyBatis3JavaMapperType());
+                ClassUtils.splic(introspectedTable.getMyBatis3JavaMapperType()));
         Interface interfaze = new Interface(type);
         interfaze.setVisibility(JavaVisibility.PUBLIC);
         commentGenerator.addJavaFileComment(interfaze);

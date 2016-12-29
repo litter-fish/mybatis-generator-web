@@ -60,6 +60,12 @@
                     <input type="text" class="form-control" placeholder="password" name="password" id="password" value="root">
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">数据库</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" placeholder="dataBaseName" name="dataBaseName" id="dataBaseName" value="root">
+                </div>
+            </div>
 
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">

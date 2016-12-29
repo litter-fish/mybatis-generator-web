@@ -119,9 +119,9 @@
                     </div>
                 </div>
                 <div class="hidden" id="hiddenDiv">
-                    <%--<input type="hidden" id="tableName" name="tableConfig.tableName">
-                    <input type="hidden" id="domainObjectName" name="tableConfig.domainObjectName">
-                    <input type="hidden" id="tableColumn" name="tableConfig.tableColumn">--%>
+                    <input type="hidden" id="tableName" name="tableName">
+                    <%-- <input type="hidden" id="domainObjectName" name="tableConfig.domainObjectName">
+                     <input type="hidden" id="tableColumn" name="tableConfig.tableColumn">--%>
 
                     <input type="hidden" id="userId" name="userId" value="${userId}">
                     <input type="hidden" id="driverClass" name="driverClass" value="${driverClass}">
@@ -154,7 +154,6 @@
                         <thead>
                             <th>ignoreTable</th>
                             <th>tableName</th>
-                            <th>domainObjectName</th>
                             <th>config</th>
                         </thead>
                         <tbody id="content">
@@ -189,33 +188,23 @@
 
 <script>
 
-    var table = new Array();
+    var contextConfigArr = new Array();
+    var contextConfig = {};
 
     $(document).on('click', '#getAllTable >li >a', function() {
         layer.load(1,{
             shade: [0.1,'#fff'] //0.1透明度的白色背景
         });
+        
         var tableName = $(this).attr("tableName");
-        /*var database = getPostData(_formDomId);
-        database["tableName"] = tableName;*/
+        $("#tableName").val(tableName);
         ajaxBody("/generator-web/base/getDatabase", tableName, 0, queryAllTable);
     });
 
-    var _formDomId = "GeneratorConfig";
-    var contextConfigArr = new Array();
-    var contextConfig = {};
     //保存
     $(document).on('click', '#btnQuery', function() {
         var database = {};
-
         database["projectFolder"] = $("#projectFolder").val();
-
-        /*var properties = {};
-        properties["resource"] = "resource";
-        properties["url"] = "url";
-
-        database["properties"] = properties;*/
-
         var classPathEntry = {};
         var classPathEntryArr = new Array();
         classPathEntry["location"] = $("#location").val();
@@ -227,14 +216,6 @@
         contextConfig["defaultModelType"] = $("#defaultModelType").val();
         contextConfig["targetRuntime"] = $("#targetRuntime").val();
         contextConfig["introspectedColumnImpl"] = $("#introspectedColumnImpl").val();
-
-        /*var propertyGeneratorArr = new Array();
-        var propertyGenerator = {};
-        propertyGenerator["name"] ="";
-        propertyGenerator["value"] ="true";
-        propertyGeneratorArr.push(propertyGenerator);
-        contextConfig["propertyGenerator"] = propertyGeneratorArr;*/
-        //contextConfigArr.push(propertyGeneratorArr);
 
         var javaModelGenerator = {};
         javaModelGenerator["modelPackage"] = $("#modelPackage").val();
@@ -266,7 +247,7 @@
         var jdbcConnection = {};
         jdbcConnection["userId"] = $("#userId").val();
         jdbcConnection["driverClass"] = $("#driverClass").val();
-        jdbcConnection["connectionURL"] = $("#connectionURL").val();
+        jdbcConnection["connectionURL"] = "jdbc:mysql://${ip}/" + $("#tableName").val() + "?characterEncoding=utf8";
         jdbcConnection["password"] = $("#password").val();
         contextConfig["jdbcConnection"] = jdbcConnection;
 
@@ -276,8 +257,15 @@
         database["contextConfig"] = contextConfigArr;
 
 
-        console.log(database);
-        ajaxPostBody("/generator-web/base/generatorConfig", database, function(resData) {
+        ajaxBody("/generator-web/base/generatorConfig", database,0, function(resData) {
+            layer.msg('文件生成成功', function(){
+                layer.closeAll('loading');
+                contextConfigArr = new Array();
+                contextConfig = {};
+                $("#content").empty();
+                $("#content2").empty();
+                $("<input type=text>").val("");
+            });
 
         });
     });
@@ -329,7 +317,6 @@
         });
     });
 
-    var array = new Array();
     $(document).on('click', '.tableConfig', function() {
 
         var tableName = $(this).attr("name");
@@ -362,46 +349,13 @@
     });
 
 
-    function ajaxPostBody(url, data, succ, err){
+    function ajaxPostBody(url, data, succ){
         layer.load(1,{
             shade: [0.1,'#fff'] //0.1透明度的白色背景
         });
         ajaxBody(url, data, 0, queryAllTable);
 
     };
-
-
-    /**
-     * 获取表单数据
-     */
-    function getPostData(_formDomId){
-        var postData = {};
-        $("#"+_formDomId).find('input[type="hidden"],input[type="text"],input[type="radio"],input[type="checkbox"],textarea').each(function(){
-            var input = $(this),name= input.attr("name"),value = input.val();
-            //单选框
-            if('radio' == input.attr("type")){
-                var $radio = input.radio();
-                if(!$radio.prop('checked')){
-                    return true;
-                }
-            }
-            //复选框
-            else if('checkbox' == input.attr("type")){
-                var $checkbox = input.checkbox();
-                if(!$checkbox.prop('checked')){
-                    return true;
-                }
-            }
-            //输入框，隐藏域
-            else{
-                if(isEmpty(input.val())){
-                    return true;
-                }
-            }
-            postData[name] = value;
-        });
-        return postData;
-    }
 
     var isEmpty = function(obj){
         return null === obj || (typeof obj === 'undefined') || '' === obj;
@@ -412,14 +366,12 @@
     function queryAllTable(data, number, reqParam) {
         $("#content").empty();
         layer.closeAll('loading');
-        var obj = eval( "(" + data + ")" );//转换后的JSON对象
-        /*$("#content").refresh();
-         $("#content").append("<tr><td>表名称</td><td>操作</td></tr>");*/
+        var obj = eval("("+data+")");
 
         $.each(obj.data, function(i, item) {
             var tableValue = {};
             var content = "<tr tableName=" + item.table + " number=" + i + "><td><div class='checkbox'><label><input type='checkbox' tableName=" + item.table + " number=" + i + "></label></div></td>";
-            content += "<td width='200px'>" + item.table + "</td><td  width='200px'>" + item.table + "</td>";
+            content += "<td width='200px'>" + item.table + "</td>";
 
             content += "<td  width='200px'><button type=\"button\" class=\"btn btn-default tableConfig\" name=" + item.table + " number=" + i + ">config</button></td></tr>";
 

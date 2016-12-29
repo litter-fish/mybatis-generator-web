@@ -102,7 +102,7 @@
             <div class="form-group">
                 <label class="col-sm-7 control-label">enableUpdateByExample</label>
                 <div class="col-sm-5">
-                    <select class="form-control" id="enableUpdateByExample" name="pdateByExample">
+                    <select class="form-control" id="enableUpdateByExample" name="enableUpdateByExample">
                         <option value="false">false</option>
                         <option value="true">true</option>
                     </select>

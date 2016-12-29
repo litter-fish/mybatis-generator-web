@@ -15,28 +15,22 @@
  */
 package org.mybatis.generator.codegen.mybatis3.model;
 
-import static org.mybatis.generator.internal.util.JavaBeansUtil.getGetterMethodName;
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
-import static org.mybatis.generator.internal.util.messages.Messages.getString;
+import org.mybatis.generator.api.CommentGenerator;
+import org.mybatis.generator.api.FullyQualifiedTable;
+import org.mybatis.generator.api.IntrospectedColumn;
+import org.mybatis.generator.api.dom.OutputUtilities;
+import org.mybatis.generator.api.dom.java.*;
+import org.mybatis.generator.codegen.AbstractJavaGenerator;
+import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
+import org.mybatis.generator.util.ClassUtils;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.mybatis.generator.api.CommentGenerator;
-import org.mybatis.generator.api.FullyQualifiedTable;
-import org.mybatis.generator.api.IntrospectedColumn;
-import org.mybatis.generator.api.dom.OutputUtilities;
-import org.mybatis.generator.api.dom.java.CompilationUnit;
-import org.mybatis.generator.api.dom.java.Field;
-import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
-import org.mybatis.generator.api.dom.java.InnerClass;
-import org.mybatis.generator.api.dom.java.JavaVisibility;
-import org.mybatis.generator.api.dom.java.Method;
-import org.mybatis.generator.api.dom.java.Parameter;
-import org.mybatis.generator.api.dom.java.TopLevelClass;
-import org.mybatis.generator.codegen.AbstractJavaGenerator;
-import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
+import static org.mybatis.generator.internal.util.JavaBeansUtil.getGetterMethodName;
+import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 /**
  * 
@@ -56,8 +50,7 @@ public class ExampleGenerator extends AbstractJavaGenerator {
                 "Progress.6", table.toString())); //$NON-NLS-1$
         CommentGenerator commentGenerator = context.getCommentGenerator();
 
-        FullyQualifiedJavaType type = new FullyQualifiedJavaType(
-                introspectedTable.getExampleType());
+        FullyQualifiedJavaType type = new FullyQualifiedJavaType(ClassUtils.splic(introspectedTable.getExampleType()));
         TopLevelClass topLevelClass = new TopLevelClass(type);
         topLevelClass.setVisibility(JavaVisibility.PUBLIC);
         commentGenerator.addJavaFileComment(topLevelClass);

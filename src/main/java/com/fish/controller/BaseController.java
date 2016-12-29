@@ -37,7 +37,7 @@ public class BaseController {
 
         Database database = ClassUtils.toJavaObject(body, Database.class);
 
-        String url = "jdbc:mysql://" + database.getIp() + "/test?characterEncoding=utf8";
+        String url = "jdbc:mysql://" + database.getIp() + "/" + database.getDataBaseName()  + "?characterEncoding=utf8";
 
         // jdbc:mysql://localhost:3306/test?characterEncoding=utf8
         database.setConnectionURL(url);
