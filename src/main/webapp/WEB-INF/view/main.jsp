@@ -152,7 +152,7 @@
                     <!-- Table -->
                     <table class="table table-hover">
                         <thead>
-                            <th>ignoreTable</th>
+                            <th><div class='checkbox'><label><input type='checkbox' id="ignoreTable">ignoreTable</label></div></th>
                             <th>tableName</th>
                             <th>config</th>
                         </thead>
@@ -200,6 +200,29 @@
         $("#tableName").val(tableName);
         ajaxBody("/generator-web/base/getDatabase", tableName, 0, queryAllTable);
     });
+
+    $("#ignoreTable").change(function() {
+        if ($(this).is(":checked")) {
+            $("#content input[type=checkbox]").each(function () {
+               var input = $(this);
+                input.prop("checked", true);
+                var number = $(this).attr("number");
+                var tableValue = tableArr[number];
+                tableValue["ignoreTable"] = true;
+                tableArr[number] = tableValue;
+            });
+        } else {
+            $("#content input[type=checkbox]").each(function () {
+                var input = $(this);
+                input.prop("checked", false);
+                var number = $(this).attr("number");
+                var tableValue = tableArr[number];
+                tableValue["ignoreTable"] = false;
+                tableArr[number] = tableValue;
+            });
+        }
+    });
+
 
     //保存
     $(document).on('click', '#btnQuery', function() {
@@ -265,6 +288,8 @@
                 $("#content").empty();
                 $("#content2").empty();
                 $("<input type=text>").val("");
+                tableConfig = {};
+                tableArr = new Array();
             });
 
         });
